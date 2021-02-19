@@ -3,6 +3,7 @@ import {View, Text, TextInput, Picker, StyleSheet, FlatList, ScrollView, Touchab
 import {styles} from '../styles/globalStyle';
 import {AntDesign} from '@expo/vector-icons';
 import storeObject from "../store/store";
+import DatePicker from 'react-native-datepicker';
 
 import dbObject from '../components/database/db'
 import EntryDetails from './EntryDetails';
@@ -19,6 +20,19 @@ function ViewReportScreenLoan(props) {
     const [mNet, setNet] = useState(null)
     const [mNetNeg, setNetNeg] = useState(null)
     const [selectedValue,setSelectedValue] = useState("")
+    const [selectedStartDate, setSelectedStartDate] = useState(null);
+    const [selectedEndDate, setSelectedEndDate] = useState(null);
+    
+    var today = new Date();
+    var date=today.getDate() + "-"+ parseInt(today.getMonth()+1) +"-"+ today.getFullYear();
+    
+    function onStartDateChange(date){
+        setSelectedStartDate(date)
+      }
+      function onEndDateChange(date){
+        setSelectedEndDate(date)
+      }
+    
 
     useEffect(() => {
         (async () => {
@@ -60,17 +74,93 @@ function ViewReportScreenLoan(props) {
 
                 <View style={[styles.row, {width: '100%', justifyContent: 'space-around', height: 50}]}>
 
-                    <Text style={[styles.boldText, styles.normalText, styles.blueText, {
+                    {/* <Text style={[styles.boldText, styles.normalText, styles.blueText, {
                         width: '50%',
                         textAlign: 'center',
                         borderRightColor: '#dedede',
                         borderRightWidth: 1
-                    }]}><AntDesign style={[styles.blueText]} name="calendar" size={18} color="black"/> START DATE</Text>
+                    }]}><AntDesign style={[styles.blueText]} name="calendar" size={18} color="black"/> START DATE</Text> */}
+                    <TouchableOpacity style={{borderWidth: .4, borderColor: '#dedede'}}>
+                        <View style={[styles.row, {justifyContent: 'center', width: 180, padding: 0, height: 40}]}>
+                            <AntDesign name="calendar" size={24} />
+                            <DatePicker
+                                date={selectedStartDate}
+                                mode="date"
+                                placeholder="START DATE"
+                                format="YYYY-MM-DD"
+                                minDate="2000-06-01"
+                                maxDate={today}
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                customStyles={{
+                                    dateIcon: {
+                                        display: 'none',
+                                        visibility: 'hidden'
+                                    },
+                                    dateInput: {
+                                        marginHorizontal: 0,
+                                        border: 0,
+                                        outline: 0,
+                                        borderWidth: 0
+                                    }
+                                    // ... You can check the source to find the other keys.
+                                }}
+                                // onDateChange={(date) => {
+                                //     duedate = date
+                                //     // Alert.alert(duedate)
+                                //     setDate(duedate)
+                                // }}
+                                onDateChange={(date) => { setSelectedStartDate(date)  }}
+                            />
 
-                    <Text style={[styles.boldText, styles.normalText, styles.blueText, {
+                            {/* <AntDesign name="caretdown" size={10} color="red" /> */}
+                        </View>
+                    </TouchableOpacity>
+
+                    {/* <Text style={[styles.boldText, styles.normalText, styles.blueText, {
                         width: '50%',
                         textAlign: 'center'
-                    }]}><AntDesign style={[styles.blueText]} name="calendar" size={18} color="black"/> END DATE</Text>
+                    }]}><AntDesign style={[styles.blueText]} name="calendar" size={18} color="black"/> END DATE</Text> */}
+
+<TouchableOpacity style={{borderWidth: .4, borderColor: '#dedede'}}>
+                        <View style={[styles.row, {justifyContent: 'center', width: 180, padding: 0, height: 40}]}>
+                            <AntDesign name="calendar" size={24} color={styles.blueText }/>
+                            <DatePicker
+                                date={selectedEndDate}
+                                mode="date"
+                                placeholder="END DATE"
+                                format="YYYY-MM-DD"
+                                minDate="2000-06-01"
+                                maxDate={today}
+                                confirmBtnText="Confirm"
+                                cancelBtnText="Cancel"
+                                customStyles={{
+                                    dateIcon: {
+                                        display: 'none',
+                                        visibility: 'hidden'
+                                    },
+                                    dateInput: {
+                                        marginHorizontal: 0,
+                                        border: 0,
+                                        outline: 0,
+                                        borderWidth: 0
+                                    }
+                                    // ... You can check the source to find the other keys.
+                                }}
+                                // onDateChange={(date) => {
+                                //     duedate = date
+                                //     // Alert.alert(duedate)
+                                //     setDate(duedate)
+                                // }}
+                                onDateChange={(date) => {
+                                   setSelectedEndDate(date)
+                                   }}
+                            />
+
+                            {/* <AntDesign name="caretdown" size={10} color="red" /> */}
+                        </View>
+                    </TouchableOpacity>
+
 
                 </View>
 
