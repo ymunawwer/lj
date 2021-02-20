@@ -68,7 +68,9 @@ function Loan(props) {
         header: null
     };
 
-    
+    hideModal = () =>{ setModalVisibility(false);
+      // setRecord(null)
+    }
   showModal = (index) => {
     
    
