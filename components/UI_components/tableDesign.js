@@ -91,9 +91,9 @@ export const MTable = (props) => {
             data={props?.data}
             renderItem={renderItem}
             style={[props?.tableContentStyle, {borderBottomRightRadius: 4, borderBottomLeftRadius: 4}]}
-            keyExtractor={
-              item => item[props?.itemKey].toString()
-            }
+            // keyExtractor={
+            //   (item,index) => item[props?.itemKey].toString()
+            // }
             ItemSeparatorComponent={FlatListItemSeparator}
           />
 
