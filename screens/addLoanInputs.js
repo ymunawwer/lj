@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState,useEffect} from 'react';
 import {Picker, Text, TextInput, TouchableOpacity, View, Alert,StyleSheet} from 'react-native';
 import {styles} from '../styles/globalStyle';
 import DatePicker from 'react-native-datepicker';
@@ -19,11 +19,12 @@ import ExistingContactsChooser from "../components/UI_components/ExistingContact
 import MStepIndicator from "../components/UI_components/StepIndicator";
 
 
+
 function addLoanInputs(props) {
 
   const {navigation, route} = props
     const {transactionType} = route.params
-
+  
   const [date, setDate] = useState("2016-05-15")
   const [tabIndex, setTabIndex] = useState(0)
   const [chosenContact, setChosenContact] = useState({})
@@ -36,7 +37,21 @@ function addLoanInputs(props) {
   const [installmentAmount,setInstallmentAmount] = useState([ 'one', 'two', 'three', 'four', 'five' ])
   const [loanAmount,setLoanAmount] = useState("")
   const [period,setPeriod] = useState("")
+  const [contacts,setContacts] = useState({})
   const [loanMode,setLoanMode] = useState("")
+  // const bookId = storeObject.getCurrentBookData().id
+ 
+  
+  useEffect(() => {
+
+  (async ()=>{
+    const updatedContacts = await dbObject.getExistingContacts(props.personals.currentBookData.id);
+    setContacts(updatedContacts)
+    console.log('contacts',contacts)
+    return updatedContacts
+
+  })();
+})
   
   // setInterestRate( [ 'one', 'two', 'three', 'four', 'five' ])
   // setInstallmentAmount( [ 'one', 'two', 'three', 'four', 'five' ])
@@ -110,13 +125,26 @@ function addLoanInputs(props) {
     return (
       <View style={{flex: 1}}>
          <View >
+              {/* <Text
+              style={[{marginHorizontal: 2,borderColor:'#000',borderStyle:'solid'}]}
+              
+                  placeholder={'Customer Name'}
+                  // onChangeText={text => setLoanName(text)}
+              >
+                {chosenContact?.name}
+
+              </Text > */}
               <RoundedInput
-                  label={"Customer Name"}
-                  placeholder={"Customer Name"}
-                  onChangeText={text => setLoanName(text)}
-              />
+                        style={[{color: themeColor}]}
+                        label="Customer Name"
+                        
+                        value= {chosenContact?.name}
+                        
+                    />
          
               <RoundedInput
+              
+              
                   label={"New Loan Name"}
                   placeholder={"New Loan Name"}
                   onChangeText={text => setLoanName(text)}
@@ -338,7 +366,8 @@ function addLoanInputs(props) {
           <ExistingContactsChooser onPressContact={(item) => {
               setChosenContact(item)
               setTabIndex(1)
-          }}/>
+
+          }} data = {contacts} />
     );
   }
 
