@@ -19,8 +19,17 @@ function AddNewRecordsHomeTab2_3(props) {
   const [selectedValue,setSelectedValue] = useState("Sales")
   const [remark, setRemark] = useState("")
   const [amount, setAmount] = useState(0)
-
+  const [savedContacts,setSavedContacts] = useState([])
     useEffect(() => {
+     
+
+      (async ()=>{
+        const Contacts = await dbObject.getExistingContacts(props.personals.currentBookData.id);
+        setSavedContacts(Contacts)
+        
+        return Contacts
+    
+      })();
 
     }, [])
 
@@ -79,12 +88,12 @@ function AddNewRecordsHomeTab2_3(props) {
 
             <ExistingContactsChooser onPressContact={(item) => {
                 if(transactionType === transactionTypes.GOT || transactionType === transactionTypes.PAYABLE) {
-                    navigation.navigate('YouGotScreen', {transactionType, customerPhone: item.phone})
+                    navigation.navigate('YouGotScreen', {transactionType, customerPhone: item.phone,customerData :item})
                 }
                 else {
-                    navigation.navigate('YouGaveScreen', {transactionType, customerPhone: item.phone})
+                    navigation.navigate('YouGaveScreen', {transactionType, customerPhone: item.phone,customerData :item})
                 }
-            }}/>
+            }} data={savedContacts}/>
 
         </View>
 

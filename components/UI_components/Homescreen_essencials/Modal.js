@@ -284,7 +284,7 @@ class MyModal extends React.Component {
                                         <Text style={[styleglobal.greyTextSm, {
                                             textAlign: 'left',
                                             paddingHorizontal: 0
-                                        }]}>{item.date.substring(4, 15).toUpperCase() + " - " + item.date.substring(16, 21)}</Text>
+                                        }]}>{item.date?.substring(4, 15).toUpperCase() + " - " + item.date?.substring(16, 21)}</Text>
                                     </View>
                                     <View style={styleI.cardGiveAmt}>
                                         {

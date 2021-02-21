@@ -37,7 +37,7 @@ import {Snackbar, Subheading} from "react-native-paper";
 function YouGaveScreen(props) {
     const {navigation, themeColor = "red", isGotScreen = false, route} = props
 
-    const {transactionType, customerPhone} = route.params
+    const {transactionType, customerPhone,customerData} = route.params
 
 
     const initialState = {
@@ -205,7 +205,7 @@ function YouGaveScreen(props) {
                         style={[{color: themeColor}]}
                         label="Customer Name"
                         
-                        value={'name'}
+                        value={customerData?.name}
                         
                     />
                 </View>

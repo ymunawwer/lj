@@ -23,11 +23,11 @@ function HomeTab2DuePayableComponent(props) {
   const [mTakeSum, setTakeSum] = useState(null)
   const [sumArr, setSumArr] = useState([])
 
-
   
   const [isModalVisible, setModalVisibility] = useState(false)
 
   useEffect(() => {
+   
 
     (async () => {
       const contactRes = await dbObject.getExistingContactsWithGave(props.personals.currentBookId)

@@ -5,6 +5,7 @@ import {styles} from "../../styles/globalStyle";
 import {Title} from "react-native-paper";
 
 const ExistingContactsChooser = (props) => {
+    console.log('data',props.data)
     return (
         <View style={{flex: 1}}>
 
@@ -20,7 +21,7 @@ const ExistingContactsChooser = (props) => {
 
                 <FlatList
                     style={{flex: 1}}
-                    data={[{id: 1, name: "Fake Name", phone: "+912222222222"}, {id: 2, name: "Fake Name 2", phone: "+912222222222"}]}
+                    data={typeof(props.data)!=='undefined'?props.data:[{id: 1, name: "Fake Name", phone: "+912222222222"}, {id: 2, name: "Fake Name 2", phone: "+912222222222"}]}
                     ItemSeparatorComponent={() => (
                         <View style={{height: 1, backgroundColor: "#E8E8E8", marginHorizontal: 30}}>
 
@@ -51,7 +52,7 @@ const ExistingContactsChooser = (props) => {
                             </View>
                         </TouchableOpacity>
                     )}
-                    keyExtractor={item => item.id.toString()}
+                    // keyExtractor={item => item.id.toString()}
 
                 />
 

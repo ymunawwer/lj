@@ -61,7 +61,12 @@ export default function BusinessCardEdit({navigation}) {
                 <TextInput style={[stylesI.TextInput]} placeholder="GST Number"/>
                 <Text style={styles.boldText}><MaterialIcons name="business-center" size={24} color="black"/> Shop
                     Office Address</Text>
-                <TextInput style={[stylesI.TextInput, {marginTop: 20}]} placeholder="Address"/>
+                <TextInput style={[stylesI.TextInput, {marginTop: 20}]} placeholder="Address Line 1"/>
+                <TextInput style={[stylesI.TextInput, {marginTop: 20}]} placeholder="Address Line 2"/>
+                <TextInput style={[stylesI.TextInput, {marginTop: 20}]} placeholder="City/District"/>
+                <TextInput style={[stylesI.TextInput, {marginTop: 20}]} placeholder="State"/>
+                <TextInput style={[stylesI.TextInput, {marginTop: 20}]} placeholder="Postal Code"/>
+                <TextInput style={[stylesI.TextInput, {marginTop: 20,marginBottom:80}]} placeholder="Country"/>
 
             </ScrollView>
 
