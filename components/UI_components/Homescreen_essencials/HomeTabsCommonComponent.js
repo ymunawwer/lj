@@ -58,28 +58,18 @@ function HomeTabsCommonComponents(props) {
    */
   const {navigation, componentName, cardsData, searchBarData, tableData, lan = 'english', fabBtnData} = props
 
-
-
-
-
-
   const [filterSelection, setFilterSelection] = useState('A')
   const [sortingSelection, setSortingSelection] = useState('Most Recent')
-  state = {
-    isModalVisible: false,
-  };
 
   const [isModalVisible, setModalVisibility] = useState(false)
   const [isGive, setIsGive] = useState(null)
-  
-  
+
   // const [sortingSelection, setSortingSelection] = useState('Most Recent')
 
-  showModal = (index) => {
+  const showModal = async (index) => {
     
    
-    index===0?getData('give'):getData('take');
-    
+    index === 0 ? await getData('give') : await getData('take');
     setModalVisibility(true );
     
     // console.log(isGive)
@@ -87,7 +77,7 @@ function HomeTabsCommonComponents(props) {
   };
 
 
-  hideModal = () =>{ setModalVisibility(false);
+  const hideModal = () =>{ setModalVisibility(false);
     setRecord(null)}
 
 
@@ -109,7 +99,7 @@ function HomeTabsCommonComponents(props) {
             
             console.log(key)
 
-              const record = await dbObject.getRecordByQueryString(key+">0")
+            const record = await dbObject.getRecordByQueryString(key+">0")
             console.log("View Report record outside if ", record)
   
                   setRecord(record);
@@ -988,18 +978,19 @@ function HomeTabsCommonComponents(props) {
         await Sharing.shareAsync(uri);
         return uri;
       } else {
-        const permission = await MediaLibrary.requestPermissionsAsync();      if (permission.granted) {
+        const permission = await MediaLibrary.requestPermissionsAsync();
+        if (permission.granted) {
         //     const asset =await MediaLibrary.createAssetAsync(uri);
         //   alert(console.log(asset))
         //   return uri;
-        var currentdate = new Date(); 
-        var datetime = currentdate.getDate() + "_"
-            + (currentdate.getMonth()+1)  + "_" 
-            + currentdate.getFullYear() + "-"  
-            + currentdate.getHours() + ":"  
-            + currentdate.getMinutes() + ":" 
-            + currentdate.getSeconds();
-        const pdfName = `${uri.slice(
+          const currentdate = new Date();
+          const datetime = currentdate.getDate() + "_"
+              + (currentdate.getMonth() + 1) + "_"
+              + currentdate.getFullYear() + "-"
+              + currentdate.getHours() + ":"
+              + currentdate.getMinutes() + ":"
+              + currentdate.getSeconds();
+          const pdfName = `${uri.slice(
             0,
             uri.lastIndexOf('/') + 1
         )}Report_${datetime}.pdf`
@@ -1028,15 +1019,9 @@ function HomeTabsCommonComponents(props) {
     console.log("View Report record outside if ", record[0]["COUNT(*)"])
 
     setmCustomerCount(record[0]["COUNT(*)"]);
-          
-        
-     
     
 
 }
-
-
-
 
   // customer count end
 
@@ -1071,7 +1056,7 @@ function HomeTabsCommonComponents(props) {
 
     (async () => {
 
-      getCustomerCount(1);
+      await getCustomerCount(1);
       if(tableData.data !== null) {
         setContacts(tableData.data)
         setFilterSortedContacts(tableData.data)
@@ -1104,41 +1089,34 @@ function HomeTabsCommonComponents(props) {
                   <Text style={{fontSize: 13, fontWeight: "bold", color: "#303030", fontFamily: "monospace"}}>{data.title}</Text>
                   <Text style={index === 0? styles.giveAmountText: styles.takeAmountText}>₹{data.amount}</Text>
                 </View>
-                <Entypo name={"info-with-circle"} size={20}
-                                        style={{position: "absolute", top: 0, right: 0, margin: 10}} color={"#303030"} onPress={showModal.bind(this,index)}/>
+                <TouchableOpacity  onPress={() => showModal(index)} style={{position: "absolute", top: 0, right: 0, margin: 10}}>
+                  <Entypo name={"info-with-circle"} size={20}
+                           color={"#303030"}/>
+                </TouchableOpacity>
+
               </View>
             ))
           }
 
         </View>
-        {
-           tableData.data != null && tableData.data.length > 0 ?
 
-           (
-          mContacts.length > 0?
         <Modal
-          visible={isModalVisible}
-          dismiss={hideModal}
-          mRecord ={mRecord}
-          headerItem={[
-            "Customer Details",
-            isGive==='give'?'Got / Payable':'Gave / Receivable',
-           
-            
-          ]}
-          // tableData = {tableData}
-          // mTakeSum={tableData['sumArray']}
-          //         lan={lan}
-          //         navigation={navigation}
-          //         data={mContacts}
-        ></Modal>
-      
-        :
-        <Caption>No contacts found according to your search...</Caption>
-           ):
-           <Caption>No contacts found according to your search...</Caption>
+    visible={isModalVisible}
+    dismiss={hideModal}
+    mRecord ={mRecord}
+    headerItem={[
+      "Customer Details",
+      isGive === 'give' ? 'Got / Payable' : 'Gave / Receivable',
 
-}
+
+    ]}
+    // tableData = {tableData}
+    // mTakeSum={tableData['sumArray']}
+    //         lan={lan}
+    //         navigation={navigation}
+    //         data={mContacts}
+    />
+
         <TouchableOpacity style={{
           flexDirection: "row",
           elevation: 8,

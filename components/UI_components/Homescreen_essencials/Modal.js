@@ -8,7 +8,7 @@ import {
   View,
   Text,
   FlatList,
-  TouchableOpacity
+  TouchableOpacity,
  
 } from 'react-native';
 import t from 'prop-types';
@@ -16,6 +16,10 @@ import {Table, Row} from "react-native-table-component";
 import HomeTable from "./HomeTable";
 import dbObject from '../../database/db';
 import {styles as styleglobal} from '../../../styles/globalStyle'
+import {bindActionCreators} from "redux";
+import {setExistingCustomers} from "../../../redux/actions/booksDataActions";
+import {connect} from "react-redux";
+import storeObject from "../../../store/store";
   
 
 
@@ -78,7 +82,7 @@ class MyModal extends React.Component {
         }
         
     }else{
-       const record = await dbObject.getRecord(props.personals.currentBookId)
+       const record = await dbObject.getRecord(this.props.personals.currentBookId)
        console.log("View Report record outside if ", record)
 
         setRecord(record)
@@ -154,7 +158,7 @@ class MyModal extends React.Component {
     );
   }
 
-  
+
  
 
   render() {
@@ -451,8 +455,18 @@ const styleI = StyleSheet.create({
 
 });
 
+const mapStateToProps = (state) => {
+    const {personals, booksData, contactSearch} = state
+    return {personals, booksData, contactSearch}
+};
 
+const mapDispatchToProps = dispatch => (
+    bindActionCreators({
+        //all actions come here
+        setExistingCustomers
+    }, dispatch)
+);
 
-export default MyModal;
+export default connect(mapStateToProps, mapDispatchToProps)(MyModal)
 
 

@@ -27,6 +27,8 @@ function ContactScreen(props) {
   const sortType = Contacts.SortTypes.FirstName;
 
   const [mContacts, setContacts] = useState(null)
+  const [errorCheckComplete, setErrorCheckComplete] = useState(false);
+  const [contactFetchStatus, setContactFetchStatus] = useState(false)
   const [filteredContacts, setFilteredContacts] = useState([])
   const [permStatus, setPermStatus] = useState(false)
   const [originalContacts, setOriginalContacts] = useState(null)
@@ -78,6 +80,8 @@ function ContactScreen(props) {
         if (data.length > 0) {
 
           setContacts(data)
+          setContactFetchStatus(true)
+          errorcheck(data)
         }
       }
       else {
@@ -102,16 +106,18 @@ function ContactScreen(props) {
     console.log("error check")
 
     try {
+      let filteredCont = filteredContacts
       contacts.map((contact) => {
 
-        let filteredCont = filteredContacts
+
         if("phoneNumbers" in contact && contact.phoneNumbers[0]) {
           filteredCont.push(contact)
-          setFilteredContacts(filteredCont)
-          setOriginalContacts(filteredCont)
 
         }
       })
+      setFilteredContacts(filteredCont)
+      setOriginalContacts(filteredCont)
+      setErrorCheckComplete(true);
     }
     catch(e) {
       console.log(e)
@@ -142,17 +148,8 @@ function ContactScreen(props) {
             {/* One Contact */}
 
             {
-              mContacts ?
-                errorcheck(mContacts)
-                :
-                <View style={{flex: 1, alignItems: "center", justifyContent: "center", padding: 10}}>
-                  <ActivityIndicator animating={true} color={Colors.warningText}/>
-                  <Caption>Fetching Your Contacts. Please Wait...</Caption>
-                </View>
-            }
-            {
+              errorCheckComplete ?
 
-              filteredContacts ?
                 <FlatList
                   style={{flex: 1}}
                   data={filteredContacts}
@@ -191,7 +188,12 @@ function ContactScreen(props) {
                   )}
                   keyExtractor={item => item.id}
 
-                /> : console.log('')
+                /> :
+
+                  <View style={{flex: 1, alignItems: "center", justifyContent: "center", padding: 10}}>
+                    <ActivityIndicator animating={true} color={Colors.warningText}/>
+                    <Caption>Fetching Your Contacts. Please Wait...</Caption>
+                  </View>
 
             }
           </>
