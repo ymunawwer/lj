@@ -19,6 +19,7 @@ import {FloatingAction} from "react-native-floating-action";
 
 function OneCustomerScreenLoan(props) {
   const {route, navigation} = props
+  console.log('check',route)
 
   const [mRecords, setRecords] = useState(null)
   const [mNet, setNet] = useState(null)
@@ -221,7 +222,7 @@ function OneCustomerScreenLoan(props) {
 
                     }}
                     onPress={() => {
-                      navigation.navigate('OneCustomerProfileScreen')
+                      navigation.navigate('OneCustomerProfileScreen',route.params)
                     }}
                 >
                   <Text style={{color: Colors.primary}}>SEE PROFILE</Text>
@@ -320,11 +321,11 @@ function OneCustomerScreenLoan(props) {
           switch (name) {
             case "bt_you_got":
               storeObject.setContact(phone)
-              navigation.navigate('YouGotScreenLoan', {contact: phone, loanName: route.params.loanName})
+              navigation.navigate('YouGotScreenLoan', {contact: phone, loanName: route.params.loanName, name: route.params.name})
               break;
             case "bt_you_gave":
               storeObject.setContact(phone)
-              navigation.navigate('YouGaveScreenLoan', {contact: phone, loanName: route.params.loanName})
+              navigation.navigate('YouGaveScreenLoan', {contact: phone, loanName: route.params.loanName, name: route.params.name})
               break;
           }
         }}

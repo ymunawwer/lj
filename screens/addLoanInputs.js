@@ -135,7 +135,7 @@ function addLoanInputs(props) {
 
               </Text > */}
               <RoundedInput
-                        style={[{color: themeColor}]}
+                        // style={[{color: themeColor}]}
                         label="Customer Name"
                         
                         value= {chosenContact?.name}

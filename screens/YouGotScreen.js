@@ -10,6 +10,10 @@ import YouGaveScreen from "./YouGaveScreen";
 
 function YouGotScreen(props) {
     const { navigation } = props
+  
+    
+    // customerPhone: phone,
+    // customerName: route.params.name
 
     return (
       <View style={{flex: 1, width: "100%"}}>

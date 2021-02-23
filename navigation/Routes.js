@@ -64,19 +64,21 @@ function Routes(props) {
 
 
         <Stack.Screen name="YouGaveScreenLoan" component={YouGaveScreenLoan}
-                      options={{
-                        title: 'You Gave Loan: Name',
+                      options={({route}) => ({
+                        title: 'You Gave Loan: '+route.params.name,
                         headerStyle: {backgroundColor: '#f1f2f3'},
                         headerTintColor: 'red'
-                      }}/>
+                      })
+                    }/>
 
 
         <Stack.Screen name="YouGotScreenLoan" component={YouGotScreenLoan}
-                      options={{
-                        title: 'You Got Loan: Name',
+                      options={({route}) => ({
+                        title: 'You Got Loan: '+route.params.name,
                         headerStyle: {backgroundColor: '#f1f2f3'},
                         headerTintColor: 'green'
-                      }}/>
+                      })
+                    }/>
 
         <Stack.Screen name="YouGaveScreen" component={YouGaveScreen}
                       options={({route}) => ({

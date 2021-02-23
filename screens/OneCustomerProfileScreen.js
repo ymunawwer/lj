@@ -11,11 +11,13 @@ import Colors from "../constants/Colors";
 function OneCustomerProfileScreen(props) {
 
     const {navigation, route} = props
+    
     const [activeSwitch, setActiveSwitch] = useState(true)
 
     const onToggleActiveSwitch = () => setActiveSwitch(!activeSwitch);
-
+    
     return(
+       
         <View style={{flex: 1, backgroundColor: "#ffffff", padding: 10}}>
 
             <ScrollView>
@@ -24,8 +26,8 @@ function OneCustomerProfileScreen(props) {
                     <View style={{height:100,width:100,borderRadius:100/2,backgroundColor:'#4e54c8',alignItems:'center',justifyContent:'center'}}>
                         <Text style={{fontSize:60,color:'white'}}>F</Text>
                     </View>
-                    <Title>Fake Name</Title>
-                    <Subheading>+912222222222</Subheading>
+                    <Title>{route.params.name}</Title>
+                    <Subheading>{route.params.phoneNumber}</Subheading>
                 </View>
 
                 <Divider />
@@ -38,7 +40,7 @@ function OneCustomerProfileScreen(props) {
 
                     <View style={{flex: 1}}>
                         <Title style={{fontSize: 16}}>Customer Name:</Title>
-                        <Caption>Test Name</Caption>
+                        <Caption>{route.params.name}</Caption>
                     </View>
 
                     <View style={{alignItems: "center"}}>
@@ -62,7 +64,7 @@ function OneCustomerProfileScreen(props) {
 
                     <View style={{flex: 1}}>
                         <Title style={{fontSize: 16}}>Mobile Number:</Title>
-                        <Caption>+911234567890</Caption>
+                        <Caption>{route.params.phoneNumber}</Caption>
                     </View>
 
                     <View style={{alignItems: "center"}}>

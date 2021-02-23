@@ -10,6 +10,7 @@ import storeObject from "../../../store/store";
 const LoanScreenTable = (props) => {
 
   const { navigation, mTakeSum = 0, lan = "english", data = []} = props
+  console.log('loan data',data)
 
   const addCustomerBtn = () => {
     return(

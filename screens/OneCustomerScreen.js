@@ -19,6 +19,7 @@ import {transactionTypes} from "../constants/Constansts";
 
 function OneCustomerScreen(props) {
     const {route, navigation} = props
+    
 
     const [mRecords, setRecords] = useState(null)
     const [mNet, setNet] = useState(null)
@@ -223,7 +224,7 @@ function OneCustomerScreen(props) {
 
                                         }}
                                         onPress={() => {
-                                            navigation.navigate('OneCustomerProfileScreen')
+                                            navigation.navigate('OneCustomerProfileScreen',route.params)
                                         }}
                                     >
                                         <Text style={{color: Colors.primary}}>SEE PROFILE</Text>
@@ -389,25 +390,29 @@ function OneCustomerScreen(props) {
                         case "bt_you_got":
                             navigation.navigate('YouGotScreen', {
                                 transactionType: transactionTypes.GOT,
-                                customerPhone: phone
+                                customerPhone: phone,
+                                customerName: route.params.name
                             })
                             break;
                         case "bt_you_gave":
                             navigation.navigate('YouGaveScreen', {
                                 transactionType: transactionTypes.GAVE,
-                                customerPhone: phone
+                                customerPhone: phone,
+                                customerName: route.params.name
                             })
                             break;
                         case "bt_payable":
                             navigation.navigate('YouGotScreen', {
                                 transactionType: transactionTypes.PAYABLE,
-                                customerPhone: phone
+                                customerPhone: phone,
+                                customerName: route.params.name
                             })
                             break;
                         case "bt_receivable":
                             navigation.navigate('YouGaveScreen', {
                                 transactionType: transactionTypes.RECEIVABLE,
-                                customerPhone: phone
+                                customerPhone: phone,
+                                customerName: route.params.name
                             })
                             break;
                     }
