@@ -280,7 +280,8 @@ class MyModal extends React.Component {
                         }>
                                 <View style={[styleglobal.row, styleI.noPad]}>
                                     <View style={[styleglobal.container, {flex: 2}]}>
-                                        <Text style={styleglobal.boldText}>{item.partner_contact}</Text>
+                                    <Text style={styleglobal.boldText}>{item.name}</Text>
+                                        <Text >{item.partner_contact}</Text>
                                         <Text style={[styleglobal.greyTextSm, {
                                             textAlign: 'left',
                                             paddingHorizontal: 0

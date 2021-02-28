@@ -7,10 +7,11 @@ const db = SQLite.openDatabase("ljdbtest64.db");
 
 
 class database {
-    constructor(props) {
-        console.log('DB Cons');
+     constructor() {
+        (async()=>{
+            console.log('DB Cons');
         this.state = {};
-        db.transaction(tx => {
+        await db.transaction(tx => {
             tx.executeSql(
                 "create table if not exists books (id integer primary key AUTOINCREMENT, name text NOT NULL, trashed integer, password text, remoteid text);", [],
                 (tx, results) => {
@@ -19,7 +20,7 @@ class database {
                 }
             );
         });
-        db.transaction(tx => {
+        await db.transaction(tx => {
             tx.executeSql(
                 "create table if not exists firstuse (firstuse integer primary key, remoteid text);", [],
                 (tx, results) => {
@@ -42,7 +43,7 @@ class database {
             );
         });
 
-        db.transaction(tx => {
+        await db.transaction(tx => {
             tx.executeSql(
                 "create table if not exists binpass (firstuse integer primary key, binpass text, remoteid text);", [],
                 (tx, results) => {
@@ -69,7 +70,7 @@ class database {
 
 
 
-        db.transaction(tx => {
+        await db.transaction(tx => {
             tx.executeSql(
                 "create table if not exists personals (id integer PRIMARY KEY, fullname text, phone_no text, auth_token text, active integer, language text, currency text, tagline char(50), shopaddress char(50), email text, first_sign_in text, last_sign_in text, photourl text, isemailverified integer, uid text, currentbook integer, UPIID text, remoteid text);", [],
                 (tx, results) => {
@@ -78,7 +79,7 @@ class database {
                 }
             );
         });
-         db.transaction(tx => {
+        await db.transaction(tx => {
             tx.executeSql(
                 "create table if not exists loanname (id integer primary key AUTOINCREMENT, name text, isactive integer, lastupdated text NOT NULL, contactname text, contactno text, bookid integer, remoteid text);", [],
                 (tx, results) => {
@@ -90,7 +91,7 @@ class database {
 
 
 
-        db.transaction(tx => {
+        await db.transaction(tx => {
             tx.executeSql(
                 "INSERT INTO personals (id, language, currency) VALUES (1, 'english', 'USD')", [],
                 (tx, results) => {
@@ -102,7 +103,7 @@ class database {
             );
         });
 
-        db.transaction(tx => {
+        await db.transaction(tx => {
             tx.executeSql(
                 "create table if not exists records (record_id integer primary key AUTOINCREMENT, txid text, book_id integer, amount integer, date text, duedate text, give integer, take integer, attachment text, remarks text, partner_contact text, uploaded integer, phoneid integer, type text, remoteid text);",
                 [],
@@ -114,9 +115,21 @@ class database {
             );
         });
 
-        db.transaction(tx => {
+        await db.transaction(tx => {
+            // tx.executeSql(
+            //     "DROP table contactwithrecords;",
+            //     [],
+            //     (tx, results) => {
+            //         // console.log('Record table query success Results', results);
+            //     }, (t, error) => {
+            //         // console.log('Constructor error : ', error)
+            //     }
+            // );
+
+
+
             tx.executeSql(
-                "create table if not exists contactwithrecords (recordid integer primary key AUTOINCREMENT, contact text NOT NULL, bookid integer NOT NULL,name text NOT NULL, lastupdated text NOT NULL, loanYes integer, address text, rAmount integer, pAmount integer, netAmount integer, remoteid text, hasGaveGot integer, hasRecievableDue integer);",
+                "create table if not exists contactwithrecords (recordid integer primary key AUTOINCREMENT, contact text NOT NULL, bookid integer NOT NULL,name text NOT NULL, lastupdated text NOT NULL, loanYes integer, address text, rAmount integer, pAmount integer, netAmount integer, remoteid text, hasGaveGot integer, hasRecievableDue integer,isDeleted integer DEFAULT 0,isActive integer DEFAULT 1,isSms integer DEFAULT 1,limitGave integer DEFAULT 10000,limitGot integer DEFAULT 5000);",
                 [],
                 (tx, results) => {
                     // console.log('Record table query success Results', results);
@@ -126,9 +139,27 @@ class database {
             );
         });
 
-        db.transaction(tx => {
+        await db.transaction(tx => {
             tx.executeSql(
                 "create table if not exists loanrecords (recordid integer primary key AUTOINCREMENT,txid text, book_id integer, amount integer, date text, duedate text, give integer, take integer, attachment text, remarks text, partner_contact text, uploaded integer, interest integer, type text, mode text, installment integer, totalMonths integer, loanName text, installmentAmount text, remoteid text);",
+                [],
+                (tx, results) => {
+                    // console.log('Loan table query success Results', results);
+                }, (t, error) => {
+                    // console.log('Constructor error : ', error)
+                }
+            );
+        });
+        // BUSINESS_NAME: "Lekha Jokha",
+        // USER_NAME:"charlie",
+        // PH_NO:9999999999,
+        // BUSINESS_TYPE:"Aluminium casting",
+        // ADDRESS:"Earth",
+        // EMAIL:"lekhajhokadb@gmail.com"
+        await db.transaction(tx => {
+            
+            tx.executeSql(
+                "create table if not exists visitingrecords (recordid integer primary key AUTOINCREMENT,BUSINESS_NAME text, USER_NAME text, PH_NO integer, GST_NO text, BUSINESS_TYPE text, ADDRESS text, EMAIL text,DESIGNATION text);",
                 [],
                 (tx, results) => {
                     // console.log('Loan table query success Results', results);
@@ -164,7 +195,8 @@ class database {
 
 
 
-    }
+    })()
+}
 
     checkifbinisfirsttime(){
         return new Promise((resolve, reject) =>{
@@ -203,6 +235,53 @@ class database {
         });
          })
     }
+
+    getVisitingCard(){
+        return new Promise((resolve, reject) =>{
+        db.transaction(tx => {
+            tx.executeSql(
+                "SELECT * from visitingrecords",
+                [],
+                (tx, results) => {
+                    // console.log('data',results)
+                                            resolve(results.rows)
+
+                    // console.log('setrecord : Results', results);
+                }, (t, error) => {
+                                            reject(error)
+
+                    // console.log('setrecord : error : ', error)
+                }
+            );
+        });
+         })
+    }
+
+
+
+    setVisitingCard(BUSINESS_NAME , USER_NAME , PH_NO ,GST_NO, BUSINESS_TYPE , ADDRESS , EMAIL,DESIGNATION ){
+        return new Promise((resolve, reject) =>{
+
+            db.transaction(tx => {
+                tx.executeSql(
+                    "INSERT INTO visitingrecords ( BUSINESS_NAME , USER_NAME , PH_NO , GST_NO , BUSINESS_TYPE , ADDRESS , EMAIL,DESIGNATION  ) VALUES ('" + BUSINESS_NAME + "','" + USER_NAME + "'," + PH_NO + ", '" +GST_NO+"', '"+ BUSINESS_TYPE + "', '" + ADDRESS + "', '" + EMAIL +"','"+DESIGNATION+"')",
+                    //  ( 'BUSINESS_NAME ',' USER_NAME ',458, 'GST_NO', 'BUSINESS_TYPE ','ADDRESS', 'EMAI','DESIGNATION')",
+                    // ('" + BUSINESS_NAME + "','" + USER_NAME + "'," + PH_NO + ", '" +GST_NO+"', '"+ BUSINESS_TYPE + "', '" + ADDRESS + "', '" + EMAIL +"','"+DESIGNATION+"')",
+                    [],
+                    (tx, results) => {
+    
+                        console.log('setrecord : Results', results.rows);
+                    }, (t, error) => {
+                        console.log('setrecord : error : ', error)
+                    }
+                );
+            });
+
+         })
+    }
+
+
+
 
     checkBinPassword(password){
         return new Promise((resolve, reject) => {
@@ -432,7 +511,7 @@ class database {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    "SELECT * FROM contactwithrecords WHERE contact='" + phone + "' AND bookid='" + bookId + "' AND loanYes="+loanYes+" AND hasGaveGot="+Gg+" AND hasRecievableDue="+Rd,
+                    "SELECT * FROM contactwithrecords WHERE contact='" + phone + "' AND bookid='" + bookId +" AND isDeleted=0 "+ "' AND loanYes="+loanYes+" AND hasGaveGot="+Gg+" AND hasRecievableDue="+Rd,
                     [],
                     (tx, results) => {
                         console.log('setrecord : Results', results);
@@ -501,7 +580,7 @@ class database {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    "SELECT * FROM contactwithrecords WHERE bookid='" + bookId + "' ORDER BY lastupdated DESC",
+                    "SELECT * FROM contactwithrecords WHERE bookid=" + bookId + " AND isDeleted=0 ORDER BY lastupdated DESC",
                     [],
                     (tx, results) => {
                         resolve(results.rows['_array'])
@@ -518,7 +597,7 @@ class database {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    "SELECT * FROM contactwithrecords WHERE bookid='" + bookId + "' AND hasRecievableDue=1 ORDER BY lastupdated DESC",
+                    "SELECT * FROM contactwithrecords WHERE bookid=" + bookId + " AND isDeleted=0 AND hasRecievableDue=1 ORDER BY lastupdated DESC",
                     [],
                     (tx, results) => {
                         resolve(results.rows['_array'])
@@ -529,12 +608,15 @@ class database {
             })
         })
 
+        // Screen 3 name not coming 
+
     }
+    // query change required join record and contactwithrecords
     getExistingContactsWithGave(bookId) {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    "SELECT * FROM contactwithrecords WHERE bookid='" + bookId + "' AND hasGaveGot=1 ORDER BY lastupdated DESC",
+                    "SELECT * FROM contactwithrecords rc,records r WHERE rc.bookid = r.book_id AND bookid=" + bookId + " AND isDeleted=0 AND give = 1 OR take = 1 ORDER BY lastupdated DESC",
                     [],
                     (tx, results) => {
                         resolve(results.rows['_array'])
@@ -546,6 +628,30 @@ class database {
         })
 
     }
+
+
+       // query change required join record and contactwithrecords
+       getExistingContactsWithRecble(bookId) {
+        return new Promise((resolve, reject) => {
+            db.transaction(tx => {
+                tx.executeSql(
+                    "SELECT * FROM contactwithrecords cr,records r WHERE cr.bookid= r.book_id AND r.partner_contact=cr.contact  AND bookid=" + bookId + " AND isDeleted=0 AND give = 2 OR take = 2 ORDER BY lastupdated DESC",
+                    [],
+                    (tx, results) => {
+                        resolve(results.rows['_array'])
+                    },
+                    (t, error) => {
+                        reject(error)
+                    })
+            })
+        })
+
+    }
+
+
+
+
+
 
 
 
@@ -609,6 +715,7 @@ class database {
     addLoanName(name, contactname, contactno,bookid){
 
         return new Promise((resolve, reject)=>{
+            console.log('phno',contactno)
             db.transaction(tx => {
                 const date = new Date();
                 tx.executeSql(
@@ -665,6 +772,77 @@ class database {
                 );
             });
         })
+
+    }
+
+
+    setUserData(recordid,bookId,phone,key,value){
+        return new Promise((resolve, reject) => {
+
+
+            db.transaction(tx => {
+                tx.executeSql(
+                    "SELECT * FROM contactwithrecords WHERE contact='" + phone + "' AND bookid=" + bookId +" AND isDeleted=0 ",
+                    [],
+                    (tx, results) => {
+                       
+                        results.rows.length !== 0 ?
+                            db.transaction(tx => {
+                                tx.executeSql(
+                                    "UPDATE contactwithrecords SET "+key+" = '"+value+"' WHERE recordid="+recordid +" AND bookid=" +bookId + " AND contact ="+phone ,
+                                    [],
+                                    (tx, results) => {
+
+
+                                        db.transaction(tx => {
+                                            tx.executeSql(
+                                                "SELECT * FROM contactwithrecords WHERE contact='" + phone + "' AND bookid=" + bookId +" AND isDeleted=0 ",
+                                                [],
+                                                (tx, results) => {
+                                                    console.log('get updated Results new ', results.rows['_array']);
+                                                    resolve(results.rows)
+                                                }, (t, error) => {
+                                                    console.log('Constructor error : ', error)
+                                                    reject(error)
+                                                }
+                                            );
+                                        });
+
+                                     
+                                   
+                                    }, (t, error) => {
+                                        console.log('setrecord : error : ', error)
+                                    }
+                                );
+                            }) : resolve(results);
+                        console.log('exists');
+
+                    }, (t, error) => {
+                        console.log('No customer exist ', error)
+                        reject(error)
+                    }
+                );
+            });
+        })
+
+
+
+
+
+
+            // db.transaction(tx => {
+            //     tx.executeSql(
+                  
+            //         [],
+            //         (tx, results) => {
+            //             resolve(results)
+            //         }, (t, error) => {
+            //             console.log('Constructor error : ', error)
+            //             reject(error)
+            //         }
+            //     );
+            // });
+        // })
 
     }
     setIsUploadedDataLoan(recordid){
@@ -783,12 +961,12 @@ class database {
         })
 
     }
-    getRecordByQueryString(queryString){
+    getRecordByQueryString(bookid,queryString){
         return new Promise((resolve, reject) => {
 
             db.transaction(tx => {
                 tx.executeSql(
-                    "SELECT * FROM records WHERE "+queryString,
+                    "SELECT * FROM records r,contactwithrecords cws WHERE r.book_id=cws.bookid AND r.partner_contact=cws.contact AND book_id=" +bookid+" and " +queryString,
                     [],
                     (tx, results) => {
                         console.log('get Record Results new ', results.rows['_array']);
@@ -809,7 +987,7 @@ class database {
 
             db.transaction(tx => {
                 tx.executeSql(
-                    "SELECT * FROM records WHERE book_id=" + bookid,
+                    "SELECT * FROM contactwithrecords cws,records r WHERE  r.partner_contact=cws.contact AND r.book_id=cws.bookid AND book_id=" + bookid,
                     [],
                     (tx, results) => {
                         console.log('get Record Results new ', results.rows['_array']);
@@ -830,7 +1008,7 @@ class database {
 
             db.transaction(tx => {
                 tx.executeSql(
-                    "SELECT COUNT(*) FROM records WHERE book_id=" + bookid,
+                    "SELECT COUNT(*) FROM contactwithrecords WHERE bookid=" + bookid +" AND isDeleted=0 ",
                     [],
                     (tx, results) => {
                         console.log('get Record Results new ', results.rows['_array']);
@@ -844,6 +1022,29 @@ class database {
         })
 
     }
+    
+
+    getDetailsOfUser(phone, bookid) {
+        return new Promise((resolve, reject) => {
+            const date = new Date();
+            db.transaction(tx => {
+                tx.executeSql(
+                    "SELECT * FROM contactwithrecords WHERE bookid=" + bookid + " AND contact='" + phone+"'"+" AND isDeleted=0",
+                    [],
+                    (tx, results) => {
+                        console.log('get Record Results', results.rows);
+                        resolve(results.rows)
+                    }, (t, error) => {
+                        console.log('Constructor error : ', error)
+                        reject(error)
+                    }
+                );
+            });
+        })
+    }
+
+ 
+
 
     getRecordsOfUser(phone, bookid) {
         return new Promise((resolve, reject) => {
@@ -864,12 +1065,15 @@ class database {
         })
     }
 
+   
+
+
     getDuePayableRecord(bookid){
         return new Promise((resolve, reject) => {
             const date = new Date();
             db.transaction(tx => {
                 tx.executeSql(
-                    "SELECT * FROM records WHERE take=2 OR give=2",
+                    "SELECT * FROM contactwithrecords cws,records r WHERE  r.contact=cws.partner_contact AND r.book_id=cws.bookid AND r.book_id=" + bookid + " AND cws.isDeleted=0 and r.book_id=cws.bookid and r.take=2 OR r.give=2",
                     [],
                     (tx, results) => {
                         console.log('get Record Results', results.rows['_array']);
@@ -889,7 +1093,7 @@ class database {
             const date = new Date();
             db.transaction(tx => {
                 tx.executeSql(
-                    "SELECT * FROM loanrecords WHERE book_id=" + bookid + " AND partner_contact='" + phone+"'",
+                    "SELECT * FROM loanrecords lr,contactwithrecords cws WHERE lr.book_id=cws.bookid AND lr.partner_contact=cws.contact AND  lr.book_id=" + bookid + " AND lr.partner_contact='" + phone+"'",
                     [],
                     (tx, results) => {
                         console.log('get Record Results', results.rows);
@@ -1315,6 +1519,9 @@ class database {
             })
         });
     }
+
+   
+
     getSumOfPay(bookid) {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
@@ -1440,11 +1647,12 @@ class database {
         });
     }
 
+    // AND r.contact=cws.partner_contact
     getCashTransactions(bookid) {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    "SELECT * FROM records WHERE book_id=" + bookid+" AND type='Cash'", [],
+                    "SELECT * FROM records r,contactwithrecords cws WHERE book_id=" + bookid+" AND type='Cash' OR type='cash'", [],
                     (tx, results) => {
                         resolve(results)
                     }, (t, error) => {
@@ -1491,16 +1699,55 @@ class database {
             })
         });
     }
+    // amount loanrecords
 
-    getSumOfTakesLoanContact(bookid,c) {
+    getTakesLoanContact(bookid) {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    "SELECT amount FROM loanrecords WHERE book_id=" + bookid+" AND take=1 AND partner_contact='"+c+"'", [],
+                    "SELECT * FROM loanrecords WHERE book_id=" + bookid+" AND take=1", [],
                     (tx, results) => {
+                       
+                     
+                        resolve(results.rows)
+                    }, (t, error) => {
+                        reject(error)
+                    }
+                )
+            })
+        });
+    }
+    getGavesLoanContact(bookid) {
+        return new Promise((resolve, reject) => {
+            db.transaction(tx => {
+                tx.executeSql(
+                    "SELECT * FROM loanrecords WHERE book_id=" + bookid+" AND take=0 ", [],
+                    (tx, results) => {
+                        
+                       
+                        
+                        resolve(results.rows)
+                    }, (t, error) => {
+                        reject(error)
+                    }
+                )
+            })
+        });
+    }
+
+
+
+    getSumOfTakesLoanContact(bookid) {
+        return new Promise((resolve, reject) => {
+            db.transaction(tx => {
+                tx.executeSql(
+                    "SELECT * FROM loanrecords WHERE book_id=" + bookid+" AND take=1", [],
+                    (tx, results) => {
+                       
                         const arr = results.rows['_array']
                         const map = arr.map(a => a.amount)
                         const sum = map.reduce((a, b) => a + b, 0)
+                     
                         resolve(sum)
                     }, (t, error) => {
                         reject(error)
@@ -1509,15 +1756,17 @@ class database {
             })
         });
     }
-    getSumOfGavesLoanContact(bookid,c) {
+    getSumOfGavesLoanContact(bookid) {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
                 tx.executeSql(
-                    "SELECT amount FROM loanrecords WHERE book_id=" + bookid+" AND take=0 AND partner_contact='"+c+"'", [],
+                    "SELECT * FROM loanrecords WHERE book_id=" + bookid+" AND take=0 ", [],
                     (tx, results) => {
+                        
                         const arr = results.rows['_array']
                         const map = arr.map(a => a.amount)
                         const sum = map.reduce((a, b) => a + b, 0)
+                        
                         resolve(sum)
                     }, (t, error) => {
                         reject(error)
@@ -1567,6 +1816,7 @@ class database {
 
         }
     }
+
 
 
 

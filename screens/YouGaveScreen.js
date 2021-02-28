@@ -41,8 +41,8 @@ function YouGaveScreen(props) {
     // const customerName = route.params.customerName
     // const customerPhone = route.params.customerPhone
 
-    const {transactionType, customerPhone,customerName} = route.params
-    console.log('customer Data-',customerName)
+    const {transactionType, customerPhone,customerData,customerName} = route.params
+    console.log('customer Data-',customerPhone)
 
 
     const initialState = {
@@ -225,10 +225,10 @@ function YouGaveScreen(props) {
                                     style={{ height: 55, borderWidth: 1, borderColor:'#dedede' }}
                                     onValueChange={(itemValue, itemIndex) => setLoanName(itemValue)}
                                 >
-                                    <Picker.Item label="Select Loan Name" value="" />
-                                    <Picker.Item label="loan 1" value="loan 1" />
-                                    <Picker.Item label="loan 2" value="loan 2" />
-                                    <Picker.Item label="loan 3" value="loan 3" />
+                                    <Picker.Item label="Sales" value="Sales"/>
+                          <Picker.Item label="Purchases" value="Purchases"/>
+                          <Picker.Item label="Income" value="Income"/>
+                          <Picker.Item label="Expenses" value="Expenses"/>
                                 </Picker>
                             </View>
 

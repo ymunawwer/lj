@@ -16,6 +16,7 @@ function HomeTab3GaveGotComponent(props) {
 
   const { navigation } = props;
   let lan = props.personals.currentLan
+  
 
 
   const [mContacts, setContacts] = useState([])
@@ -31,8 +32,9 @@ function HomeTab3GaveGotComponent(props) {
 
     (async () => {
 
-      const contactRes = await dbObject.getExistingContactsWithDue(props.personals.currentBookId)
+      const contactRes = await dbObject.getExistingContactsWithGave(props.personals.currentBookId)
       setContacts(contactRes)
+      console.log('contactres',contactRes)
 
       const gaveSumRes = await dbObject.getSumOfGaves(props.personals.currentBookId)
       setGiveSum(gaveSumRes)

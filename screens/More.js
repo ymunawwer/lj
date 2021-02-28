@@ -322,7 +322,7 @@ function More(props) {
 
                 <ListItem
                   text={"Profit/Loss"}
-                  onPress={() => navigation.navigate('profitLoss')}
+                  onPress={() => navigation.navigate('profitLoss',props.personals)}
                 >
                     <Image style={{width: 30, height: 30}} source={require('../assets/icons/businesscard.png')}/>
                 </ListItem>

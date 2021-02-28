@@ -15,6 +15,11 @@ import LoanOneCustomerTable from "../components/UI_components/LoanScreenEssencia
 import {ActivityIndicator, Button, Caption, Switch} from "react-native-paper";
 import Colors from "../constants/Colors";
 import {FloatingAction} from "react-native-floating-action";
+import * as Print from 'expo-print';
+import * as Permissions from 'expo-permissions';
+import * as MediaLibrary from 'expo-media-library';
+import * as Sharing from 'expo-sharing'
+import * as FileSystem from 'expo-file-system'
 
 
 function OneCustomerScreenLoan(props) {
@@ -67,6 +72,7 @@ function OneCustomerScreenLoan(props) {
     // dbObject.getUserData()
 
     dbObject.getLoanRecordsOfUser(route.params.phoneNumber, props.personals.currentBookId).then(function (records) {
+      console.log('loan records',records)
       setRecords(records['_array'])
       setRecordsLoadStatus(true)
       storeObject.setLoanRecords(records['_array'])
@@ -98,6 +104,116 @@ function OneCustomerScreenLoan(props) {
 
   }, [mRecords, storeObject.state.loanRecords]);
   let phone = route.params.phoneNumber.toString()
+
+
+    // Pdf share
+
+    const sharePdf = (url) => {
+      Sharing.shareAsync(url)
+  }
+  
+    const Prints = () =>{
+     return `<style>
+      
+      </style>
+  
+      <div id="demo">
+    <h1>Lekha Jokha Report</h1>
+    <h2>`+mRecords?.[0].name +'-'+mRecords?.[0].partner_contact+`</h2>
+    <h3>`+new Date()+`</h3>
+    
+    <table>
+    <thead>
+      <tr>
+        <th>Amount</th>
+        <th> Mode </th>
+        <th> Remark </th>
+        <th> Date </th>
+       
+      </tr>
+    </thead>
+    <tbody>`
+    }
+      
+  //     <tr>
+  //       <td data-column="First Name">Andor</td>
+  //       <td data-column="Last Name">Nagy</td>
+  //       <td data-column="Job Title">Designer</td>
+  //       <td data-column="Twitter">@andornagy</td>
+  //     </tr>
+  //     <tr>
+  //       <td data-column="First Name">Tamas</td>
+  //       <td data-column="Last Name">Biro</td>
+  //       <td data-column="Job Title">Game Tester</td>
+  //       <td data-column="Twitter">@tamas</td>
+  //     </tr>
+  //     <tr>
+  //       <td data-column="First Name">Zoli</td>
+  //       <td data-column="Last Name">Mastah</td>
+  //       <td data-column="Job Title">Developer</td>
+  //       <td data-column="Twitter">@zoli</td>
+  //     </tr>
+  //     <tr>
+  //       <td data-column="First Name">Szabi</td>
+  //       <td data-column="Last Name">Nagy</td>
+  //       <td data-column="Job Title">Chief Sandwich Eater</td>
+  //       <td data-column="Twitter">@szabi</td>
+  //     </tr>
+  //   </tbody>
+  // </table>`
+  
+      
+    const print = async (html) => {
+      try {
+        mRecords.forEach(element => {
+          html = html+`<tr>
+       
+            <td data-column="Amount">  `+element?.amount+`  </td>
+            <td data-column="Mode">  `+element?.mode+`  </td>
+            <td data-column="Remark">    `+element?.remarks+`  </td>
+            <td data-column="Date">    `+element?.lastupdated+`  </td>
+          </tr>`
+          
+        });
+        html=html+`</tbody></table>`
+        console.log('contacts',mRecords)
+        const { uri } = await Print.printToFileAsync({ 'html':html });
+        
+        if (Platform.OS === "ios") {
+          await Sharing.shareAsync(uri);
+          return uri;
+        } else {
+          const permission = await MediaLibrary.requestPermissionsAsync();
+          if (permission.granted) {
+          //     const asset =await MediaLibrary.createAssetAsync(uri);
+          //   alert(console.log(asset))
+          //   return uri;
+            const currentdate = new Date();
+            const datetime = currentdate.getDate() + "_"
+                + (currentdate.getMonth() + 1) + "_"
+                + currentdate.getFullYear() + "-"
+                + currentdate.getHours() + ":"
+                + currentdate.getMinutes() + ":"
+                + currentdate.getSeconds();
+            const pdfName = `${uri.slice(
+              0,
+              uri.lastIndexOf('/') + 1
+          )}Report_${datetime}.pdf`
+  
+          await FileSystem.moveAsync({
+              from: uri,
+              to: pdfName,
+          })
+          sharePdf(pdfName)
+      }
+  
+     
+        }  } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    // pdf share end
 
   // function to handle normal sms sending
   const handleSendSms = async () => {
@@ -253,10 +369,12 @@ function OneCustomerScreenLoan(props) {
       </View>
 
       <View style={[styles.row, {borderBottomColor: '#dedede', borderBottomWidth: 1, justifyContent: 'space-around'}]}>
-
+      
         <View style={[styles.column, styleI.cIcon, {backgroundColor: '#ffccd1'}]}>
+        <TouchableOpacity onPress={()=>{print(Prints())}} style={styles.column}>
           <AntDesign name="pdffile1" size={22} color="#fc4e5f"/>
           <Text style={[styles.blueTextSm, {color: '#fc4e5f', fontSize: 10}]}>Reports</Text>
+          </TouchableOpacity>
         </View>
 
 

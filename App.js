@@ -13,6 +13,7 @@ import {useEffect} from "react";
 import * as SplashScreen from 'react-native-splash-screen';
 import { setContacts, setIsReady} from "./redux/actions/phoneContactsActions";
 import { Snackbar } from 'react-native-paper';
+import dbObject from './components/database/db';
 // import {NativeModules} from "react-native";
 import * as Contacts from "expo-contacts";
 
@@ -56,6 +57,7 @@ export default function App(props) {
 
 
      useEffect(() => {
+        
         async function asyncTasks() {
           try {
             await SplashScreen.preventAutoHideAsync();

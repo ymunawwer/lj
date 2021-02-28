@@ -2,6 +2,7 @@ const templateObject = [
     {
         templateName: 'BC_0.html',
         templateRequire:require('../../assets/BusinessCards/BC_0.html')
+    
     },
     {
         templateName: 'BC_1.html',

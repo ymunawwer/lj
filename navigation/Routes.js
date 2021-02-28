@@ -214,11 +214,13 @@ function Routes(props) {
           :
 
             <>
-              {props.personals.isLoggedIn === false
-                ?
+              {
+               props.personals.isLoggedIn === false
+                 ?
                   <Stack.Screen name="Login" component={Login} options={{title: 'Log In'}}/>
 
-                : (
+                :
+                 (
                   renderAllActiveBooksRoutes()
                 )
               }

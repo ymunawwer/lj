@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect,useState } from "react";
 import { MTable } from "../tableDesign"
 import {Text, TouchableOpacity, View, StyleSheet} from "react-native";
 import {styles} from "../../../styles/globalStyle";
@@ -7,6 +7,9 @@ import {Row, Table} from "react-native-table-component";
 function CashLedgerTable(props) {
 
   const { navigation, lan = "english", data = []} = props
+  // const [cashInTotal,setCashInTotal] =useState(0)
+  // const [cashOutTotal, setCashOutTotal] = useState(0)
+
 
   // console.log("cash ledger data", data)
 
@@ -17,13 +20,14 @@ function CashLedgerTable(props) {
     "Particulars"
   ]
 
-  const FooterItem = [
-    "NET", "₹ 10", "₹ 10", ""
-  ]
-
+  
   const widthArr = [110, 110, 110, 110]
 
   const tableFooter = () => {
+    const FooterItem = [
+      "NET", "₹ "+(data['total']?.['cashInTotal']), "₹ "+(data['total']?.['cashOutTotal'])
+    ]
+  
     return (
       <View>
         <Table >
@@ -39,6 +43,7 @@ function CashLedgerTable(props) {
 
             <View style={[{width: widthArr[0] - 10, flexDirection: "row"}]}>
               <View style={styles.cNameTimeCont}>
+                <Text style={[styles.cTime,{fontWeight: "bold"}]}>{item.name}</Text>
                 <Text style={styles.cTime}>{item.date}</Text>
               </View>
             </View>
@@ -67,7 +72,7 @@ function CashLedgerTable(props) {
         isTouchableItem={false}
         style={{flex:1}}
         itemKey={"date"}
-        data={data}
+        data={data['_array']}
         widthArr={widthArr}
         tableFooter={tableFooter}
         isTableFooter={true}

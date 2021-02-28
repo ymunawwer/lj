@@ -87,11 +87,12 @@ function AddNewRecordsHomeTab2_3(props) {
         <View style={{flex: 1}}>
 
             <ExistingContactsChooser onPressContact={(item) => {
+              // {alert(JSON.stringify(item))}
                 if(transactionType === transactionTypes.GOT || transactionType === transactionTypes.PAYABLE) {
-                    navigation.navigate('YouGotScreen', {transactionType, customerPhone: item.phone,customerData :item})
+                    navigation.navigate('YouGotScreen', {'transactionType':transactionType, customerPhone: parseInt(item.contact),customerData :item,customerName :item.name})
                 }
                 else {
-                    navigation.navigate('YouGaveScreen', {transactionType, customerPhone: item.phone,customerData :item})
+                    navigation.navigate('YouGaveScreen', {'transactionType':transactionType, customerPhone: parseInt(item.contact),customerData :item,customerName :item.name})
                 }
             }} data={savedContacts}/>
 

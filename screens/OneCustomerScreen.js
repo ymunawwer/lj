@@ -15,6 +15,11 @@ import DialogInput from 'react-native-dialog-input';
 import Colors from "../constants/Colors";
 import {FloatingAction} from "react-native-floating-action";
 import {transactionTypes} from "../constants/Constansts";
+import * as Print from 'expo-print';
+import * as Permissions from 'expo-permissions';
+import * as MediaLibrary from 'expo-media-library';
+import * as Sharing from 'expo-sharing'
+import * as FileSystem from 'expo-file-system'
 
 
 function OneCustomerScreen(props) {
@@ -109,6 +114,94 @@ function OneCustomerScreen(props) {
     }, []);
 
     let phone = route.params.phoneNumber.toString()
+
+
+    // pdf
+
+    const Prints = () =>{
+        return `<style>
+         
+         </style>
+     
+         <div id="demo">
+       <h1>Lekha Jokha Report</h1>
+       <h2>`+mRecords?.[0].name +'-'+mRecords?.[0].partner_contact+`</h2>
+       <h3>`+new Date()+`</h3>
+       
+       <table>
+       <thead>
+         <tr>
+           <th>You Gave</th>
+           <th>You Got</th>
+           <th> Mode </th>
+           <th> Remark </th>
+           <th> Date </th>
+          
+         </tr>
+       </thead>
+       <tbody>`
+       }
+    
+
+
+const sharePdf = (url) => {
+    Sharing.shareAsync(url)
+}
+    
+      
+      
+      const print = async (html) => {
+        try {
+          console.log(mRecords)
+          mRecords.forEach(element => {
+            html = html+`<tr>
+            <td data-column="Amount">  `+element?.amount+`  </td>
+            <td data-column="Amount">  `+element?.amount+`  </td>
+            <td data-column="Mode">  `+element?.mode+`  </td>
+            <td data-column="Remark">    `+element?.remarks+`  </td>
+            <td data-column="Date">    `+element?.lastupdated+`  </td>
+            </tr>`
+            
+          });
+          html=html+`</tbody></table>`
+          const { uri } = await Print.printToFileAsync({ 'html':html });
+          
+          if (Platform.OS === "ios") {
+            await Sharing.shareAsync(uri);
+            return uri;
+          } else {
+            const permission = await MediaLibrary.requestPermissionsAsync();      if (permission.granted) {
+            //     const asset =await MediaLibrary.createAssetAsync(uri);
+            //   alert(console.log(asset))
+            //   return uri;
+            var currentdate = new Date(); 
+            var datetime = currentdate.getDate() + "_"
+                + (currentdate.getMonth()+1)  + "_" 
+                + currentdate.getFullYear() + "-"  
+                + currentdate.getHours() + ":"  
+                + currentdate.getMinutes() + ":" 
+                + currentdate.getSeconds();
+            const pdfName = `${uri.slice(
+                0,
+                uri.lastIndexOf('/') + 1
+            )}Report_${datetime}.pdf`
+    
+            await FileSystem.moveAsync({
+                from: uri,
+                to: pdfName,
+            })
+            sharePdf(pdfName)
+        }
+    
+       
+          }  } catch (error) {
+          console.error(error);
+        }
+      };
+
+    // pdf end
+
+
 
     // function to handle normal sms sending
     const handleSendSms = async () => {
@@ -262,9 +355,12 @@ function OneCustomerScreen(props) {
                 justifyContent: 'space-around'
             }]}>
 
-                <View style={[styles.column, styleI.cIcon, {backgroundColor: '#ffccd1'}]}>
+                <View style={[styles.column, styleI.cIcon, {backgroundColor: '#ffccd1'}]}  >
+                <TouchableOpacity onPress={()=>{print(Prints())}}
+                 style={styles.column}>
                     <AntDesign name="pdffile1" size={22} color="#fc4e5f"/>
                     <Text style={[styles.blueTextSm, {color: '#fc4e5f', fontSize: 10}]}>Reports</Text>
+                    </TouchableOpacity>
                 </View>
 
 

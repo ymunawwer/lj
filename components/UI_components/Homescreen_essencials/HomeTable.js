@@ -16,7 +16,22 @@ function HomeTable(props) {
   }, [props?.mTakeSum])
 
   const customItem = (item, index) => {
-
+    let marker;
+    if(item.give===2&&item.take===0){
+      marker = 'Payable'
+    }
+    if(item.give===0&&item.take===2)
+    {
+     marker = 'Receivable'
+    }
+    if(item.give===1&&item.take===0){
+      marker = 'Gave'
+    }
+    if(item.give===0&&item.take===1)
+    {
+     marker = 'Got'
+    }
+    
 
     return (
 
@@ -58,7 +73,7 @@ function HomeTable(props) {
               (
                  <View style={[styles.cAmtTimeCont, {marginLeft: 10, alignItems:"center"}]}>
                 <Text style={styles.giveAmountText}>₹{-sumArr[index]}</Text>
-                <Text style={styles.cTime}>Payable</Text>
+                <Text style={styles.cTime}>{marker}</Text>
                 </View>
               )
               

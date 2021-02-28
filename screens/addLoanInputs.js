@@ -89,8 +89,8 @@ function addLoanInputs(props) {
 
   function saveHandler(item) {
       setLoaderVisibility(true)
-
-      dbObject.addLoanName(loanName, item.name, item.phone, props.personals.currentBookData.id).then(function(res){
+    console.log('ccc',item)
+      dbObject.addLoanName(loanName, item.name, item.contact, props.personals.currentBookData.id).then(function(res){
           setLoaderVisibility(false)
 
           /*navigation.navigate('OneCustomerScreenLoan', {
@@ -100,10 +100,10 @@ function addLoanInputs(props) {
           })*/
 
           if(transactionType === transactionTypes.LOAN_TAKEN) {
-              navigation.navigate('YouGotScreenLoan', {contact: item.phone, loanName: route.params.loanName})
+              navigation.navigate('YouGotScreenLoan', {contact: item.contact, loanName: route.params.loanName})
           }
           else if(transactionType === transactionTypes.LOAN_GIVEN) {
-              navigation.navigate('YouGaveScreenLoan', {contact: item.phone, loanName: route.params.loanName})
+              navigation.navigate('YouGaveScreenLoan', {contact: item.contact, loanName: route.params.loanName})
           }
           else {
               console.log('chosen wrong transaction type.')
@@ -188,171 +188,9 @@ function addLoanInputs(props) {
                 <Text style={{color: 'white', fontWeight: 'bold'}}>SAVE</Text>
               </TouchableOpacity>
             </View>
-            <View style={{ flexDirection: 'row',marginBottom: 8}}>
-            <View style={{  borderColor: '#4e54c8',
-       
-        backgroundColor: 'white',
-        fontSize: 12, marginLeft: 8, color: "#808080"}}>
-              {/* <RoundedInput
-                //  style={{width:'50%'}}
-                //  inputStyle={{'width':'200%','marginLeft':20}}
-                  label={"Date"}
-                  placeholder={"Date"}
-                  onChangeText={text => setLoanName(text)}
-              /> */}
-              <TouchableOpacity style={{borderWidth: .4}}>
-                        <View style={[styles.row, {justifyContent: 'center', borderRadius: 8}]}>
-                            <AntDesign name="calendar" size={20} />
-                            <DatePicker
-                                date={selectedDate}
-                                mode="date"
-                                placeholder="DATE"
-                                format="YYYY-MM-DD"
-                                minDate="2000-06-01"
-                                maxDate={today}
-                                confirmBtnText="Confirm"
-                                cancelBtnText="Cancel"
-                                customStyles={{
-                                    dateIcon: {
-                                        display: 'none',
-                                        visibility: 'hidden'
-                                    },
-                                    dateInput: {
-                                        marginHorizontal: 0,
-                                        border: 0,
-                                        outline: 0,
-                                        borderWidth: 0
-                                    }
-                                    // ... You can check the source to find the other keys.
-                                }}
-                                // onDateChange={(date) => {
-                                //     duedate = date
-                                //     // Alert.alert(duedate)
-                                //     setDate(duedate)
-                                // }}
-                                onDateChange={(date) => { setSelectedDate(date)  }}
-                            />
-
-                            {/* <AntDesign name="caretdown" size={10} color="red" /> */}
-                        </View>
-                    </TouchableOpacity>
-              </View>
-              <View style={{flex:1}}>
-              <RoundedInput
-                  label={"Mode"}
-                  placeholder={"Mode"}
-                  onChangeText={text => setLoanMode(text)}
-                  
-              /></View>
-              <View style={{flex:1}}>
-              <RoundedInput
-                  label={"Period"}
-                  placeholder={"Period"}
-                  onChangeText={text => setPeriod(text)}
-                  
-              /></View>
-          </View>
-          <View style={{flexDirection: 'row' ,marginBottom: 8}}>
-          <View style={{flex:1}}>
-              <RoundedInput
-               style={{width:'50%'}}
-                  label={"Amount of Loan"}
-                  placeholder={"New Loan Name"}
-                  onChangeText={text => setLoanAmount(text)}
-                  
-              /></View>
-              <View style={{flex:1}}>
-              <RoundedInput
-               style={{width:'50%'}}
-                  label={"No. of installment"}
-                  placeholder={"New Loan Name"}
-                  onChangeText={text => setNumberOfInstallment(text)}
-                  
-              />
-             </View>
-          </View>
-          <View style={{ flexDirection: 'row',marginBottom: 8}}>
-          <View style={[stylesI.TextInput,{flex:1}]}>
-          <Picker
-                        style={[{height: 30}]}
-                        placeholder={'Interest Rate'}
-                        onValueChange={(itemValue, itemIndex) => setInterestValue(itemValue)}
-                        
-                        
-
-                    >
-                      <Picker.Item  value='' label={'Interest Rate'}  enabled={false} />
-                      {interestRateItems}
-
-                      {/* <Picker.Item label="Interest Rate" value=""/>
-                        <Picker.Item label="Owner" value="owner"/>
-                        <Picker.Item label="Partner" value="partner"/>
-                        <Picker.Item label="Proprietor" value="proprietor"/> */}
-
-                    </Picker>
-          {/* <RoundedInput style={{width:50}}
-                  label={"Interest Rate"}
-                  placeholder={"New Loan Name"}
-                  onChangeText={text => setLoanName(text)}
-              /> */}
-              </View>
-              <View style={[stylesI.TextInput,{flex:1}]}>
-              <Picker
-                        style={[{height: 30}]}
-                        placeholder={'Instalment Amount'}
-                        onValueChange={(itemValue, itemIndex) => setInstallmentValue(itemValue)}
-                    >
-                      <Picker.Item  value='' label={'Instalment Amount'} disabled/>
-                      {/* <Picker.Item label="Instalment Amount" value=""/>
-                        <Picker.Item label="Owner" value="owner"/>
-                        <Picker.Item label="Partner" value="partner"/>
-                        <Picker.Item label="Proprietor" value="proprietor"/> */}
-
-{installmentAmountItems}
-
-                    </Picker>
-              {/* <RoundedInput
-                  label={"Instalment Amount"}
-                  placeholder={"New Loan Name"}
-                  onChangeText={text => setLoanName(text)}
-              /> */}
-              </View>
-          
            
-          </View>
-          <View style={{ flexDirection: 'row',marginBottom: 8 }}>
-          <View style={{flex:1}}>
-          <RoundedInput
-                  label={"Remark"}
-                  placeholder={"Remark"}
-                  onChangeText={text => setLoanName(text)}
-              /></View>
-</View>
 
 
-          <View style={[styles.footer,{ flex:1,flexDirection: 'row', margin: 8,bottom:2 ,justifyContent: 'flex-end'}]}>
-            
-          {/* <View style={{flex:1,flexDirection: 'row',alignItems: 'flex-end'}}> */}
-        
-              <TouchableOpacity
-                style={{
-                  backgroundColor: Colors.primary,
-                  height: 50,
-                  width:60,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  paddingHorizontal: 10,
-                  
-                }}
-                onPress={() => {
-                  loanName===""?Alert.alert("Enter Loan Name"):checkLoanName(loanName)
-                  
-                }}
-              >
-                <Text style={{color: 'white', fontWeight: 'bold'}}>Next</Text>
-              </TouchableOpacity>
-              {/* </View> */}
-          </View>
  
           </View>
 

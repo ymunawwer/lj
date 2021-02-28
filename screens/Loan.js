@@ -3,7 +3,7 @@ import {AntDesign, Entypo, FontAwesome5} from '@expo/vector-icons';
 import React, {useEffect, useRef, useState} from 'react';
 import {styles} from '../styles/globalStyle';
 import Header from '../navigation/shared/header';
-import dbObject from '../components/database/db'
+import dbObject from '../components/database/db' 
 import * as lang from "../translations/lang.json"
 import RBSheet from "react-native-raw-bottom-sheet";
 import RadioButtonRN from "radio-buttons-react-native";
@@ -44,6 +44,12 @@ function Loan(props) {
     const [sortingSelection, setSortingSelection] = useState('Most Recent')
     const [loansLoadStatus, setLoansLoadStatus] = useState(false)
     const refRBSheet = useRef();
+    const [mCustomerCount, setmCustomerCount] = useState(null)
+    const [sumOfTakesLoan,setSumOfTakesLoan] = useState('')
+    const [sumOfGavesLoan,setSumOfGavesLoan] = useState('')
+    const [modalData,setModalData] = useState([])
+    
+    
     const sortingData = [
         {
           label: 'Most Recent'
@@ -68,15 +74,38 @@ function Loan(props) {
         header: null
     };
 
+    async function getModalData(key){
+      let data 
+      switch(key){
+        case 'GIVEN':
+           data = await dbObject.getGavesLoanContact(props.personals.currentBookData.id)
+          // console.log('test data',data['_array'])
+          setModalData(data['_array'])
+          setModalVisibility(true );
+          break;
+        case 'TAKEN':
+           data =await dbObject.getTakesLoanContact(props.personals.currentBookData.id)
+          //  console.log('test data',data['_array'])
+          setModalData(data['_array'])
+          setModalVisibility(true );
+          break;
+
+      }
+      
+      
+    }
+
     hideModal = () =>{ setModalVisibility(false);
       // setRecord(null)
     }
   showModal = (index) => {
     
-   
-    index===0?'':'';
+   console.log(index)
+    index===0?getModalData('GIVEN'):getModalData('TAKEN');
+
+
     
-    setModalVisibility(true );
+    
     
     // console.log(isGive)
     
@@ -975,6 +1004,20 @@ const sharePdf = (url) => {
     // end
     const fabRef = useRef(null)
 
+     // customer count
+  const getCustomerCount = async (book_id) => {
+   
+
+    const record = await dbObject.getCustomerCount(book_id)
+  console.log("View Report record outside if ", record[0]["COUNT(*)"])
+
+  setmCustomerCount(record[0]["COUNT(*)"]?record[0]["COUNT(*)"]:0);
+  
+
+}
+
+// customer count end
+
     const fabActions = [
         {
             text: "Loan Given",
@@ -994,12 +1037,21 @@ const sharePdf = (url) => {
 
     useEffect(() => {
 
+      
+   
+
         (async () => {
+
+        
+          getCustomerCount(props.personals.currentBookData.id);
 
             try {
                 setLoansLoadStatus(false)
+                setSumOfTakesLoan(dbObject.getSumOfTakesLoanContact(props.personals.currentBookData.id))
+                setSumOfGavesLoan(dbObject.getSumOfGavesLoanContact(props.personals.currentBookData.id))
                 const res = await dbObject.getLoanNames(props.personals.currentBookData.id)
                 console.log("loan data ", res)
+                
                 setLoans(res)
                 setOriginalLoans(res)
                 setLoansLoadStatus(true)
@@ -1012,17 +1064,18 @@ const sharePdf = (url) => {
             setLoans([])
             setOriginalLoans([])
         }
+       
 
     }, [isFocused]);
 
     const cardsData = [
         {
             title: "Loan Given",
-            amount: 0
+            amount: sumOfGavesLoan['_W']
         },
         {
             title: "Loan Taken",
-            amount: 0
+            amount: sumOfTakesLoan['_W']
         }
     ]
 
@@ -1064,14 +1117,14 @@ const sharePdf = (url) => {
                 </View>
 
                 {
-           originalLoans != null && originalLoans.length > 0 ?
+           (modalData != null && modalData.length > 0) ?
 
            (
-            originalLoans.length > 0?
+            modalData.length > 0?
         <Modal
           visible={isModalVisible}
           dismiss={hideModal}
-          mRecord ={originalLoans}
+          mRecord ={modalData}
           headerItem={[
             "Customer Details",
             'isGive'==='give'?'Got / Payable':'Gave / Receivable',
@@ -1142,7 +1195,7 @@ const sharePdf = (url) => {
             placeholder={ lang[lan]['search']}
             onChangeText={text => SearchFilterFunction(text)}
           />
-            <Text style={[styles.countInfo,{fontSize: 8, fontWeight: "bold", color: "#78909c", fontFamily: "monospace", alignItems: "flex-start"}]}>no. of customers:0</Text>
+            <Text style={[styles.countInfo,{fontSize: 8, fontWeight: "bold", color: "#78909c", fontFamily: "monospace", alignItems: "flex-start"}]}>no. of customers: {mCustomerCount}</Text>
 </View>
 
                     <TouchableOpacity style={styles.shopOpen} onPress={() => refRBSheet.current.open()}>

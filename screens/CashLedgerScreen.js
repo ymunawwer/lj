@@ -11,14 +11,33 @@ function CashLedgerScreen(props) {
   const { navigation } = props
   let lan = props.personals.currentLan
   const [cashRecord, setCashRecord] = useState("");
+  
 
 
   useEffect(() => {
         (async () => {
             try {
               const res = await dbObject.getCashTransactions(props.personals.currentBookData.id)
+              // console.log('ledger',res)
                   // console.log("cash", res)
-                  setCashRecord(res.row['_array'])
+                  let cashIn = res.rows['_array'].reduce((sum,item)=>{
+                    console.log('sum',JSON.stringify(sum))
+                    return (sum+item.amount)
+
+                  },0)
+
+                  let cashOut = res.rows['_array'].reduce((sum,item)=>{
+                    console.log('sum',JSON.stringify(sum))
+                    return (sum+item.amount)
+
+                  },0)
+                  console.log('ledger',res.rows);
+                  res.rows['total']={
+                    'cashInTotal':cashIn,
+                    'cashOutTotal':cashOut
+                  }
+                  console.log('total',res.rows)
+                  setCashRecord(res.rows)
 
             }
             catch (e) {

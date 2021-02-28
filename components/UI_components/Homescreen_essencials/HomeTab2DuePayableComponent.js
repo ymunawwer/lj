@@ -27,11 +27,17 @@ function HomeTab2DuePayableComponent(props) {
   const [isModalVisible, setModalVisibility] = useState(false)
 
   useEffect(() => {
+
+    
    
 
     (async () => {
-      const contactRes = await dbObject.getExistingContactsWithGave(props.personals.currentBookId)
+      const contactRes = await dbObject.getExistingContactsWithRecble(props.personals.currentBookId)
+      console.log('contactRes',contactRes)
       setContacts(contactRes)
+
+      // console.log('test-', await dbObject.getDuePayableRecord(props.personals.currentBookId))
+      
 
       const gaveSumRes = await dbObject.getSumOfDue(props.personals.currentBookId)
       setGiveSum(gaveSumRes)
