@@ -40,6 +40,8 @@ project.xcworkspace
 # Android/IntelliJ
 #
 build/
+debug/
+debug
 .idea
 .gradle
 local.properties
@@ -200,6 +202,7 @@ buck-out/
 android/.gradle/
 android/.idea/
 android/app/build/
+android/app/debug/
 android/local.properties
 lj-key-android.jks
 node_modules/
