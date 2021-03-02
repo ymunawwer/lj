@@ -6,21 +6,21 @@ import {setIsLoggedIn} from "../../redux/actions/personalsActions";
 const authState = async () => {
     try{
 
-        // const user = auth().currentUser
-        // if(user != null) {
-        //     storeObject.setIsLoggedIn(true)
-        //     globalStore.dispatch(setIsLoggedIn(true))
-        // }
-        // else {
-        //     storeObject.setIsLoggedIn(false)
-        //
-        //     //TODO: BUILD:: make this false while building
-        //     globalStore.dispatch(setIsLoggedIn(false))
-        // }
+        const user = auth().currentUser
+        if(user != null) {
+            storeObject.setIsLoggedIn(true)
+            globalStore.dispatch(setIsLoggedIn(true))
+        }
+        else {
+            storeObject.setIsLoggedIn(false)
+
+            //TODO: BUILD:: make this false while building
+            globalStore.dispatch(setIsLoggedIn(false))
+        }
 
 
-        storeObject.setIsLoggedIn(true)
-        globalStore.dispatch(setIsLoggedIn(true))
+        // storeObject.setIsLoggedIn(true)
+        // globalStore.dispatch(setIsLoggedIn(true))
     }
     catch(e) {
         new Promise.reject(e)
