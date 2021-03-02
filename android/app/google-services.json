@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "951038894435-l5ebcvsf8ffgg1nsb7m9ecvn6kqj4n9j.apps.googleusercontent.com",
+          "client_id": "951038894435-9ek7q30p37fma40nndjep3fgpvkbke3b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.lekhajokha.android",
-            "certificate_hash": "4ac6de90b61c72dc9c377c4e00209b911721819b"
+            "certificate_hash": "0a446d0ba763e02d467d68183474d46588102df4"
           }
         },
         {
