@@ -111,7 +111,7 @@ function OneCustomerScreen(props) {
 
         })();
 
-    }, []);
+    }, [storeObject.state.records]);
 
     let phone = route.params.phoneNumber.toString()
 
