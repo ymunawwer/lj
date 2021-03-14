@@ -165,6 +165,7 @@ android {
         versionCode 1
         versionName "1.0.0"
         multiDexEnabled true  //for multidexing
+        vectorDrawables.useSupportLibrary = true
     }
     splits {
         abi {
@@ -216,7 +217,7 @@ dependencies {
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-restart')
     implementation project(':react-native-sweet-alert')
-    implementation project(':react-native-image-picker')
+    //implementation project(':react-native-image-picker')
 
     implementation "com.facebook.react:react-native:+"  // From node_modules
 

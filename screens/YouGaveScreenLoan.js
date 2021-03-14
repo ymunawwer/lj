@@ -30,6 +30,9 @@ import Colors from "../constants/Colors";
 import {RoundedBtn} from "../components/UI_components/Buttons";
 import openImagePickerAsync from "../components/Logic_Repository/openImagePickerAsync";
 import calcTypes from "../store/reducers/types/calcTypes";
+//import ImagePicker from "react-native-image-picker";
+import ImagePicker from 'react-native-image-crop-picker';
+
 
 function YouGaveScreenLoan(props) {
     const { navigation, themeColor = "red", isGotScreen = false, route } = props
@@ -80,11 +83,28 @@ function YouGaveScreenLoan(props) {
 
     const openImagePicker = async () => {
         try {
-            const pickerResult = await openImagePickerAsync(true, false)
+            /*const pickerResult = await openImagePickerAsync(true, false)
             if (pickerResult.cancelled === true) {
                 return;
             }
-            setSelectedImage(pickerResult.uri);
+            setSelectedImage(pickerResult.uri);*/
+            /*ImagePicker.launchImageLibrary({}, (response) => {
+                if (response.didCancel) {
+                    console.log('User cancelled image picker');
+                } else if (response.error) {
+                    console.log('ImagePicker Error: ', response.error);
+                    alert(response.error)
+                } else if (response.customButton) {
+                    console.log('User tapped custom button: ', response.customButton);
+                } else {
+                    setSelectedImage(response.uri)
+                }
+
+            } )*/
+            const res = await ImagePicker.openPicker({
+                mediaType: "photo"
+            })
+            setSelectedImage(res.path)
         }
         catch (e) {
             alert("something went wrong")

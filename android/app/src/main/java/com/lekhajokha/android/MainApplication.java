@@ -39,7 +39,6 @@ import androidx.multidex.MultiDexApplication;
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
 import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
-import com.imagepicker.ImagePickerPackage;
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 
@@ -64,7 +63,6 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
       packages.add(new ReactNativeFirebaseAppPackage());
       packages.add(new ReactNativeFirebaseAuthPackage());
       packages.add(new ReactNativeFirebaseMessagingPackage());
-      packages.add(new ImagePickerPackage());
       packages.add(new VectorIconsPackage());
 
       //Custom Packages

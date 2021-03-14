@@ -20,6 +20,7 @@ public class CustomPackage implements ReactPackage {
 
         modules.add(new ContactSearchModule (reactContext));
         modules.add(new GetContactsDataModule (reactContext));
+        modules.add(new ImagePickerModule(reactContext));
 
         return modules;
     }

@@ -9,7 +9,8 @@ import {
     FlatList,
     Picker,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    NativeModules
 } from 'react-native';
 import {styles} from '../styles/globalStyle';
 import {AntDesign} from '@expo/vector-icons';
@@ -34,8 +35,10 @@ import {
 } from "./UiComponents/transactionComponents";
 import {Snackbar, Subheading} from "react-native-paper";
 
+
 function YouGaveScreen(props) {
     const {navigation, themeColor = "red", isGotScreen = false, route} = props
+
 
     
     // const customerName = route.params.customerName
@@ -100,16 +103,31 @@ function YouGaveScreen(props) {
     async function openImagePicker() {
         console.log("image picker clicked...")
         try {
-            const pickerResult = await openImagePickerAsync(true, false)
+            const res = await NativeModules.CustomImagePicker.pickImage()
+            alert(res)
+            setSelectedImage(res)
+            /*const pickerResult = await openImagePickerAsync(false, false)
             if (pickerResult.cancelled === true) {
                 return;
             }
-            setSelectedImage(pickerResult.uri);
+            setSelectedImage(pickerResult.uri);*/
+
+            /*const pickerResult = await reactNativeImagePicker();
+            if (pickerResult.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (pickerResult.error) {
+                console.log('ImagePicker Error: ', pickerResult.error);
+                alert(pickerResult.error)
+            } else if (pickerResult.customButton) {
+                console.log('User tapped custom button: ', pickerResult.customButton);
+            } else {
+                setSelectedImage(pickerResult.uri)
+            }*/
         } catch (e) {
-            alert("something went wrong")
+            alert("something went wrong " + e.message)
             console.log(e)
         }
-    };
+    }
 
 
 
@@ -221,7 +239,7 @@ function YouGaveScreen(props) {
 
                             <View style={{borderWidth: 1, borderColor:'#303030', borderRadius: 5, marginVertical: 10, marginHorizontal: 10}}>
                                 <Picker
-                                    selectedValue={loanName}
+
                                     style={{ height: 55, borderWidth: 1, borderColor:'#dedede' }}
                                     onValueChange={(itemValue, itemIndex) => setLoanName(itemValue)}
                                 >

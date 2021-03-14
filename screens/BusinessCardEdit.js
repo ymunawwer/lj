@@ -32,6 +32,7 @@ export default function BusinessCardEdit({navigation}) {
 
                 <View style={stylesI.TextInput}>
                     <Picker
+                        selectedValue={BUSINESS_TYPE}
                         style={[{height: 30}]}
                         placeholder={BUSINESS_TYPE}
                         onValueChange={(itemValue, itemIndex) => setBusinessType(itemValue)}
@@ -52,6 +53,7 @@ export default function BusinessCardEdit({navigation}) {
 
                 <View style={stylesI.TextInput}>
                     <Picker
+                        selectedValue={DESIGNATION}
                         placeholder="Designation"
                         style={[{height: 30}]}
                         onValueChange={(itemValue, itemIndex) => setDesignation(itemValue)}
@@ -68,6 +70,7 @@ export default function BusinessCardEdit({navigation}) {
 
                 <View style={stylesI.TextInput}>
                     <Picker
+                        selectedValue={DESIGNATION}
                         placeholder="Designation"
                         style={[{height: 30}]}
                         onValueChange={(itemValue, itemIndex) => setDesignation(itemValue)}

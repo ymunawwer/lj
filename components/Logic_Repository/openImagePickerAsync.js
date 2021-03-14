@@ -2,7 +2,7 @@ import * as ImagePicker from "expo-image-picker";
 
 const openImagePickerAsync = async (allowsEditing, allowsMultipleSelection) => {
   try {
-    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
       alert('Permission to access camera roll is required!');
